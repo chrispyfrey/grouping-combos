@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/grouping-combos/static/css/main.077f4d79.css",
+    "main.js": "/grouping-combos/static/js/main.1520b43e.js",
+    "index.html": "/grouping-combos/index.html",
+    "main.077f4d79.css.map": "/grouping-combos/static/css/main.077f4d79.css.map",
+    "main.1520b43e.js.map": "/grouping-combos/static/js/main.1520b43e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.077f4d79.css",
+    "static/js/main.1520b43e.js"
+  ]
+}
