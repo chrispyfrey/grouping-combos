@@ -4,7 +4,7 @@ import './App.css';
 
 function ComboApp() {
     const [input, setInput] = useState('');
-    const [output, setOutput] = useState([]);
+    const [output, setOutput] = useState('');
 
     const generateCombinations = (inputStr) => {
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
@@ -33,16 +33,16 @@ function ComboApp() {
                 }
             }
             
-            setOutput(comboList);
+            setOutput(comboList.join(''));
         }
         else {
-            setOutput(['Error: Input must contain more than one dimension and be delimited by spaces, newlines, commas, or some combination.']);
+            setOutput('Error: Input must contain more than one dimension and be delimited by spaces, newlines, commas, or some combination.');
         }
     }
 
     const clear = () => {
         setInput('');
-        setOutput([]);
+        setOutput('');
     }
     
     return (
@@ -61,14 +61,13 @@ function ComboApp() {
         </div>
         <div className='flexContainer'>
             <button
-                style={{width: '100px', marginTop: '20px', marginRight: '20px', marginBottom: '10px'}}
-                className='button1'
+                className='button'
                 disabled={input === '' ? true : false}
                 onClick={() => generateCombinations(input)}>
                 Generate
             </button>
             <button
-                style={{width: '100px', marginTop: '20px', marginLeft: '20px', marginBottom: '10px'}}
+                className='button'
                 disabled={input === '' ? true : false}
                 onClick={clear}>
                 Clear
