@@ -2,6 +2,10 @@ import { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './App.css';
 
+// TODO
+// 1. Intermediary state to select cardinalities of combinations
+// 2. Copy text button/functionality
+
 function ComboApp() {
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
