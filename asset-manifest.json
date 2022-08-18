@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/grouping-combos/static/css/main.17dacc73.css",
-    "main.js": "/grouping-combos/static/js/main.bb2e75d6.js",
+    "main.css": "/grouping-combos/static/css/main.2cc70ea2.css",
+    "main.js": "/grouping-combos/static/js/main.664665d8.js",
     "index.html": "/grouping-combos/index.html",
-    "main.17dacc73.css.map": "/grouping-combos/static/css/main.17dacc73.css.map",
-    "main.bb2e75d6.js.map": "/grouping-combos/static/js/main.bb2e75d6.js.map"
+    "main.2cc70ea2.css.map": "/grouping-combos/static/css/main.2cc70ea2.css.map",
+    "main.664665d8.js.map": "/grouping-combos/static/js/main.664665d8.js.map"
   },
   "entrypoints": [
-    "static/css/main.17dacc73.css",
-    "static/js/main.bb2e75d6.js"
+    "static/css/main.2cc70ea2.css",
+    "static/js/main.664665d8.js"
   ]
 }
