@@ -53,6 +53,7 @@ function ComboApp() {
         <>
         <div>
             <h1 className='title'>Grouping Set Combination Generator</h1>
+            <h4 className='subTitle'>Commas, spaces, newlines, or combinations of these are all accepted delimiters.</h4>
         </div>
         <div className='flexContainer'>
             <textarea
