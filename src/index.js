@@ -7,8 +7,11 @@ import './App.css';
 // 2. Copy text button/functionality
 
 function ComboApp() {
+    const [checkList, setChecklist] = useState([]);
+
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
+    
 
     const generateCombinations = (inputStr) => {
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
@@ -44,9 +47,35 @@ function ComboApp() {
         }
     }
 
+    const generateCardinalityList = (inputStr) => {
+        // This can likely be optimized by counting delimiters
+        if (inputStr.length != 0) {
+            let parsedInput = inputStr.replace(/,|\n/g, ' ');
+            parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+            parsedInput = parsedInput.trim();
+            const parsedInputList = parsedInput.split(' ');
+            const cardinalityList = [];
+
+            for (let i = 0; i <= parsedInputList.length; ++i) {
+                cardinalityList.push(i);
+            }
+            
+            setChecklist(cardinalityList);
+        }
+        else {
+            setChecklist([]);
+        }
+    }
+
+    const inputHandler = (inputStr) => {
+        setInput(inputStr);
+        generateCardinalityList(inputStr);
+    }
+
     const clear = () => {
         setInput('');
         setOutput('');
+        setChecklist([]);
     }
     
     return (
@@ -61,7 +90,7 @@ function ComboApp() {
                 spellCheck='false'
                 placeholder='Enter dimensions here...'
                 value={input}
-                onChange={e => setInput(e.target.value)}
+                onChange={e => inputHandler(e.target.value)}
             />
         </div>
         <div className='flexContainer'>
@@ -77,6 +106,13 @@ function ComboApp() {
                 onClick={clear}>
                 Clear
             </button>
+        </div>
+        <div className='checkBoxContainer'>{checkList.map((item, index) => (
+            <div key={index}>
+                <input value={item} type="checkbox" />
+                <span>{item}</span>
+            </div>
+        ))}
         </div>
         <div className='flexContainer'>
             <p className='output'>{output === '' ? null : output}</p>
