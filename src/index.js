@@ -7,11 +7,10 @@ import './App.css';
 // 2. Copy text button/functionality
 
 function ComboApp() {
-    const [checkList, setChecklist] = useState([]);
-
+    const [cardinalityCheckList, setCardinalityChecklist] = useState([]);
+    const [dimensionCheckList, setDimensionChecklist] = useState([]);
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
-    
 
     const generateCombinations = (inputStr) => {
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
@@ -49,7 +48,7 @@ function ComboApp() {
 
     const generateCardinalityList = (inputStr) => {
         // This can likely be optimized by counting delimiters
-        if (inputStr.length != 0) {
+        if (inputStr.length !== 0) {
             let parsedInput = inputStr.replace(/,|\n/g, ' ');
             parsedInput = parsedInput.replace(/ {2,}/g, ' ');
             parsedInput = parsedInput.trim();
@@ -57,25 +56,58 @@ function ComboApp() {
             const cardinalityList = [];
 
             for (let i = 0; i <= parsedInputList.length; ++i) {
-                cardinalityList.push(i);
+                cardinalityList.push({ 'num': i, 'state': true });
             }
             
-            setChecklist(cardinalityList);
+            setCardinalityChecklist(cardinalityList);
         }
         else {
-            setChecklist([]);
+            setCardinalityChecklist([]);
         }
     }
 
-    const inputHandler = (inputStr) => {
+    const generateDimensionList = (inputStr) => {
+        if (inputStr.length !== 0) {
+            let parsedInput = inputStr.replace(/,|\n/g, ' ');
+            parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+            parsedInput = parsedInput.trim();
+            const parsedInputList = parsedInput.split(' ');
+            const dimensionList = [];
+
+            for (let i = 0; i < parsedInputList.length; ++i) {
+                dimensionList.push({ 'dim': parsedInputList[i], 'state': false });
+            }
+            
+            setDimensionChecklist(dimensionList);
+        }
+        else {
+            setDimensionChecklist([]);
+        }
+    }
+
+    const textInputHandler = (inputStr) => {
         setInput(inputStr);
         generateCardinalityList(inputStr);
+        generateDimensionList(inputStr);
+    }
+
+    const cardinalityCheckInputHandler = (ndx) => {
+        const tmpList = [...cardinalityCheckList];
+        tmpList[ndx]['state'] = !tmpList[ndx]['state'];
+        setCardinalityChecklist(tmpList);
+    }
+
+    const dimensionCheckInputHandler = (ndx) => {
+        const tmpList = [...dimensionCheckList];
+        tmpList[ndx]['state'] = !tmpList[ndx]['state'];
+        setDimensionChecklist(tmpList);
     }
 
     const clear = () => {
         setInput('');
         setOutput('');
-        setChecklist([]);
+        setCardinalityChecklist([]);
+        setDimensionChecklist([]);
     }
     
     return (
@@ -90,7 +122,7 @@ function ComboApp() {
                 spellCheck='false'
                 placeholder='Enter dimensions here...'
                 value={input}
-                onChange={e => inputHandler(e.target.value)}
+                onChange={e => textInputHandler(e.target.value)}
             />
         </div>
         <div className='flexContainer'>
@@ -107,10 +139,25 @@ function ComboApp() {
                 Clear
             </button>
         </div>
-        <div className='checkBoxContainer'>{checkList.map((item, index) => (
+        <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
             <div key={index}>
-                <input value={item} type="checkbox" />
-                <span>{item}</span>
+                <input
+                    type='checkbox'
+                    checked={item['state']}
+                    onClick={e => cardinalityCheckInputHandler(index)}
+                />
+                <span>{item['num']}</span>
+            </div>
+        ))}
+        </div>
+        <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
+            <div key={index}>
+                <input 
+                    type='checkbox'
+                    checked={item['state']}
+                    onClick={e => dimensionCheckInputHandler(index)}
+                />
+                <span>{item['dim']}</span>
             </div>
         ))}
         </div>
