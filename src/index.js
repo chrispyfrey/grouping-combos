@@ -47,19 +47,27 @@ function ComboApp() {
     }
 
     const generateCardinalityList = (inputStr) => {
-        // This can likely be optimized by counting delimiters
-        if (inputStr.length !== 0) {
-            let parsedInput = inputStr.replace(/,|\n/g, ' ');
-            parsedInput = parsedInput.replace(/ {2,}/g, ' ');
-            parsedInput = parsedInput.trim();
-            const parsedInputList = parsedInput.split(' ');
-            const cardinalityList = [];
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
 
-            for (let i = 0; i <= parsedInputList.length; ++i) {
-                cardinalityList.push({ 'num': i, 'state': true });
+        if (parsedInput.length > 0) {
+            const parsedInputList = parsedInput.split(' ');
+
+            if (parsedInputList.length > cardinalityCheckList.length) {
+                const cardinalityList = [...cardinalityCheckList];
+
+                for (let i = cardinalityCheckList.length; i < parsedInputList.length; ++i) {
+                    cardinalityList.push({ 'num': i, 'state': true });
+                }
+                
+                setCardinalityChecklist(cardinalityList);
             }
-            
-            setCardinalityChecklist(cardinalityList);
+            else if (parsedInputList.length < cardinalityCheckList.length) {
+                const tmp = [...cardinalityCheckList];
+                tmp.length = parsedInputList.length;
+                setCardinalityChecklist(tmp);
+            }
         }
         else {
             setCardinalityChecklist([]);
@@ -67,18 +75,54 @@ function ComboApp() {
     }
 
     const generateDimensionList = (inputStr) => {
-        if (inputStr.length !== 0) {
-            let parsedInput = inputStr.replace(/,|\n/g, ' ');
-            parsedInput = parsedInput.replace(/ {2,}/g, ' ');
-            parsedInput = parsedInput.trim();
-            const parsedInputList = parsedInput.split(' ');
-            const dimensionList = [];
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
 
-            for (let i = 0; i < parsedInputList.length; ++i) {
-                dimensionList.push({ 'dim': parsedInputList[i], 'state': false });
+        if (parsedInput.length > 0) {
+            const parsedInputList = parsedInput.split(' ');
+            const currentDimList = [...dimensionCheckList];
+
+            if (parsedInputList.length === currentDimList.length) {
+                for (let i = 0; i < parsedInputList.length; ++i) {
+                    if (parsedInputList[i] !== currentDimList[i]['dim']) {
+                        currentDimList[i]['dim'] = parsedInputList[i];
+                        break;
+                    }
+                }
+            }
+            else if (parsedInputList.length > currentDimList.length) {
+                let didNotInsert = true;
+
+                for (let i = 0; i < currentDimList.length; ++i) {
+                    if (parsedInputList[i] !== currentDimList[i]['dim']) {
+                        currentDimList.splice(i, 0, {'dim': parsedInputList[i], 'state': false})
+                        didNotInsert = false;
+                        break;
+                    }
+                }
+
+                if (didNotInsert) {
+                    currentDimList.push({'dim': parsedInputList[parsedInputList.length-1], 'state': false});
+                }
+            }
+            else if (parsedInputList.length < currentDimList.length) {
+                let didNotRemove = true;
+
+                for (let i = 0; i < parsedInputList.length; ++i) {
+                    if (parsedInputList[i] !== currentDimList[i]['dim']) {
+                        currentDimList.splice(i, 1);
+                        didNotRemove = false;
+                        break;
+                    }
+                }
+
+                if (didNotRemove) {
+                    currentDimList.pop();
+                }
             }
             
-            setDimensionChecklist(dimensionList);
+            setDimensionChecklist(currentDimList);
         }
         else {
             setDimensionChecklist([]);
@@ -86,9 +130,9 @@ function ComboApp() {
     }
 
     const textInputHandler = (inputStr) => {
-        setInput(inputStr);
         generateCardinalityList(inputStr);
         generateDimensionList(inputStr);
+        setInput(inputStr);
     }
 
     const cardinalityCheckInputHandler = (ndx) => {
@@ -139,27 +183,29 @@ function ComboApp() {
                 Clear
             </button>
         </div>
-        <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
-            <div key={index}>
-                <input
-                    type='checkbox'
-                    checked={item['state']}
-                    onClick={e => cardinalityCheckInputHandler(index)}
-                />
-                <span>{item['num']}</span>
+        <div className='flexContainer'>
+            <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
+                <div key={index}>
+                    <input
+                        type='checkbox'
+                        checked={item['state']}
+                        onClick={e => cardinalityCheckInputHandler(index)}
+                    />
+                    <span>{item['num']}</span>
+                </div>
+            ))}
             </div>
-        ))}
-        </div>
-        <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
-            <div key={index}>
-                <input 
-                    type='checkbox'
-                    checked={item['state']}
-                    onClick={e => dimensionCheckInputHandler(index)}
-                />
-                <span>{item['dim']}</span>
+            <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
+                <div key={index}>
+                    <input 
+                        type='checkbox'
+                        checked={item['state']}
+                        onClick={e => dimensionCheckInputHandler(index)}
+                    />
+                    <span>{item['dim']}</span>
+                </div>
+            ))}
             </div>
-        ))}
         </div>
         <div className='flexContainer'>
             <p className='output'>{output === '' ? null : output}</p>
