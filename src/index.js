@@ -107,11 +107,12 @@ function ComboApp() {
                 }
             }
             else if (parsedInputList.length < currentDimList.length) {
+                const d = currentDimList.length - parsedInputList.length;
                 let didNotRemove = true;
 
                 for (let i = 0; i < parsedInputList.length; ++i) {
                     if (parsedInputList[i] !== currentDimList[i]['dim']) {
-                        currentDimList.splice(i, 1);
+                        currentDimList.splice(i, d+1);
                         didNotRemove = false;
                         break;
                     }
@@ -189,7 +190,7 @@ function ComboApp() {
                     <input
                         type='checkbox'
                         checked={item['state']}
-                        onClick={e => cardinalityCheckInputHandler(index)}
+                        onChange={e => cardinalityCheckInputHandler(index)}
                     />
                     <span>{item['num']}</span>
                 </div>
@@ -200,7 +201,7 @@ function ComboApp() {
                     <input 
                         type='checkbox'
                         checked={item['state']}
-                        onClick={e => dimensionCheckInputHandler(index)}
+                        onChange={e => dimensionCheckInputHandler(index)}
                     />
                     <span>{item['dim']}</span>
                 </div>
