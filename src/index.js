@@ -50,27 +50,24 @@ function ComboApp() {
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
+        const parsedInputList = parsedInput.split(' ');
 
-        if (parsedInput.length > 0) {
-            const parsedInputList = parsedInput.split(' ');
+        if (parsedInput.length === 0) {
+            setCardinalityChecklist([]);
+        }
+        else if (parsedInputList.length+1 > cardinalityCheckList.length) {
+            const cardinalityList = [...cardinalityCheckList];
 
-            if (parsedInputList.length > cardinalityCheckList.length) {
-                const cardinalityList = [...cardinalityCheckList];
-
-                for (let i = cardinalityCheckList.length; i < parsedInputList.length; ++i) {
-                    cardinalityList.push({ 'num': i, 'state': true });
-                }
-                
-                setCardinalityChecklist(cardinalityList);
+            for (let i = cardinalityCheckList.length; i <= parsedInputList.length; ++i) {
+                cardinalityList.push({ 'num': i, 'state': true });
             }
-            else if (parsedInputList.length < cardinalityCheckList.length) {
-                const tmp = [...cardinalityCheckList];
-                tmp.length = parsedInputList.length;
-                setCardinalityChecklist(tmp);
-            }
+            
+            setCardinalityChecklist(cardinalityList);
         }
         else {
-            setCardinalityChecklist([]);
+            let tmp = [...cardinalityCheckList];
+            tmp.length = parsedInputList.length+1;
+            setCardinalityChecklist(tmp);
         }
     }
 
@@ -78,55 +75,30 @@ function ComboApp() {
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
+        const parsedInputList = parsedInput.split(' ');
 
-        if (parsedInput.length > 0) {
-            const parsedInputList = parsedInput.split(' ');
-            const currentDimList = [...dimensionCheckList];
-
-            if (parsedInputList.length === currentDimList.length) {
-                for (let i = 0; i < parsedInputList.length; ++i) {
-                    if (parsedInputList[i] !== currentDimList[i]['dim']) {
-                        currentDimList[i]['dim'] = parsedInputList[i];
-                        break;
-                    }
-                }
-            }
-            else if (parsedInputList.length > currentDimList.length) {
-                let didNotInsert = true;
-
-                for (let i = 0; i < currentDimList.length; ++i) {
-                    if (parsedInputList[i] !== currentDimList[i]['dim']) {
-                        currentDimList.splice(i, 0, {'dim': parsedInputList[i], 'state': false})
-                        didNotInsert = false;
-                        break;
-                    }
-                }
-
-                if (didNotInsert) {
-                    currentDimList.push({'dim': parsedInputList[parsedInputList.length-1], 'state': false});
-                }
-            }
-            else if (parsedInputList.length < currentDimList.length) {
-                const d = currentDimList.length - parsedInputList.length;
-                let didNotRemove = true;
-
-                for (let i = 0; i < parsedInputList.length; ++i) {
-                    if (parsedInputList[i] !== currentDimList[i]['dim']) {
-                        currentDimList.splice(i, d+1);
-                        didNotRemove = false;
-                        break;
-                    }
-                }
-
-                if (didNotRemove) {
-                    currentDimList.pop();
-                }
-            }
+        if (parsedInput.length === 0) {
+            setDimensionChecklist([]);
+        }
+        else if (parsedInputList.length === dimensionCheckList.length) {
+            const dimensionCheckState = [...dimensionCheckList];
             
-            setDimensionChecklist(currentDimList);
+            for (let i = 0; i < parsedInputList.length; ++i) {
+                if (parsedInputList[i] != dimensionCheckState[i]['dim']) {
+                    dimensionCheckState[i]['dim'] = parsedInputList[i];
+                }
+            }
+
+            setDimensionChecklist(dimensionCheckState);
         }
         else {
-            setDimensionChecklist([]);
+            const tmp = [];
+
+            for (let i = 0; i < parsedInputList.length; ++i) {
+                tmp.push({'dim': parsedInputList[i], 'state': false})
+            }
+
+            setDimensionChecklist(tmp);
         }
     }
 
