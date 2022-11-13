@@ -83,12 +83,12 @@ function ComboApp() {
             for (let i = 0; i < outArr.length; ++i) {
                 let splArr = [];
                 
-                if (outArr[i][0]['dim'] === '') {
-                    splArr = [];
-                }
-                else {
-                    splArr = outArr[i][0]['dim'].split(', ');
-                }
+                //if (outArr[i][0]['dim'] === '') {
+                //    splArr = [];
+                //}
+                //else {
+                //    splArr = outArr[i][0]['dim'].split(', ');
+                //}
                 
                 if (cardSelections.includes(splArr.length) || (splArr.length === 1 && splArr[0] === '')) {
                     for (let j = 0; j < outArr[i].length; ++j) {
