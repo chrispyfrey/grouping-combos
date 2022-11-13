@@ -202,16 +202,47 @@ function ComboApp() {
             <h1 className='title'>Grouping Set Combination Generator</h1>
             <h4 className='subTitle'>Commas, spaces, newlines, or combinations of these are all accepted delimiters.</h4>
         </div>
-        <div className='flexContainer'>
-            <textarea
-                className='inputBox'
-                spellCheck='false'
-                placeholder='Enter dimensions here...'
-                value={input}
-                onChange={e => textInputHandler(e.target.value)}
-            />
+        <div className='flexContainerRow'>
+            <div className='flexContainerColInput'>
+                <div className='subSubTitle'>Grouping Dimensions</div>
+                <textarea
+                    className='inputBox'
+                    spellCheck='false'
+                    placeholder='Enter dimensions here...'
+                    value={input}
+                    onChange={e => textInputHandler(e.target.value)}
+                />
+            </div>
+            <div className='flexContainerColCard'>
+                <div className='subSubTitle'>Dimensions Required in Every Set</div>
+                <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
+                    <div key={index}>
+                        <input 
+                            type='checkbox'
+                            checked={item['state']}
+                            onChange={e => dimensionCheckInputHandler(index)}
+                        />
+                        <span>{item['dim']}</span>
+                    </div>
+                ))}
+                </div>
+            </div>
+            <div className='flexContainerColDim'>
+                <div className='subSubTitle'>Grouping Set Cardinality Filter</div>
+                <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
+                    <div key={index}>
+                        <input
+                            type='checkbox'
+                            checked={item['state']}
+                            onChange={e => cardinalityCheckInputHandler(index)}
+                        />
+                        <span>{item['num']}</span>
+                    </div>
+                ))}
+                </div>
+            </div>
         </div>
-        <div className='flexContainer'>
+        <div className='flexContainerRow'>
             <button
                 className='button'
                 disabled={input === '' ? true : false}
@@ -225,31 +256,7 @@ function ComboApp() {
                 Clear
             </button>
         </div>
-        <div className='flexContainer'>
-            <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
-                <div key={index}>
-                    <input
-                        type='checkbox'
-                        checked={item['state']}
-                        onChange={e => cardinalityCheckInputHandler(index)}
-                    />
-                    <span>{item['num']}</span>
-                </div>
-            ))}
-            </div>
-            <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
-                <div key={index}>
-                    <input 
-                        type='checkbox'
-                        checked={item['state']}
-                        onChange={e => dimensionCheckInputHandler(index)}
-                    />
-                    <span>{item['dim']}</span>
-                </div>
-            ))}
-            </div>
-        </div>
-        <div className='flexContainer'>
+        <div className='flexContainerRow'>
             <p className='output'>{output === '' ? null : output}</p>
         </div>
         </>
