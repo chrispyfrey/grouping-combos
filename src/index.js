@@ -42,15 +42,55 @@ function ComboApp() {
                 outArr.push(tmpArr);
             }
             
+            const checkedDims = [...dimensionCheckList];
+            const repeatDims = [];
+
+            for (let i = 0; i < checkedDims.length; ++i) {
+                if (checkedDims[i]['state'] === true) {
+                    repeatDims.push(checkedDims[i]['dim']);
+                }
+            }
+
+            if (repeatDims.length > 0) {
+                for (let i = 0; i < outArr.length; ++i) {
+                    for (let j = 0; j < outArr[i].length; ++j) {
+                        for (let k = 0; k < repeatDims.length; ++k) {
+                            if (outArr[i][j]['dim'].search(repeatDims[k]) === -1 && outArr[i][j]['dim'] !== '') {
+                                outArr[i].splice(j, 1);
+                                --j;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (outArr[i].length === 0) {
+                        outArr.splice(i, 1);
+                        --i;
+                    }
+                }
+            }
+            
             const outStrArr = [];
+            const checkedCards = [...cardinalityCheckList];
+            const cardSelections = [];
+
+            for (let i = 0; i < checkedCards.length; ++i) {
+                if (checkedCards[i]['state'] === true) {
+                    cardSelections.push(checkedCards[i]['num']);
+                }
+            }
 
             for (let i = 0; i < outArr.length; ++i) {
-                for (let j = 0; j < outArr[i].length; ++j) {
-                    if (i+1 < outArr.length || j+1 < outArr[i].length) {
-                        outStrArr.push('(' + outArr[i][j]['dim'] + '),\n');
-                    }
-                    else {
-                        outStrArr.push('(' + outArr[i][j]['dim'] + ')');
+                const splArr = outArr[i][0]['dim'].split(', ');
+                
+                if (cardSelections.includes(splArr.length) || (splArr.length === 1 && splArr[0] === '')) {
+                    for (let j = 0; j < outArr[i].length; ++j) {
+                        if (i+1 < outArr.length || j+1 < outArr[i].length) {
+                            outStrArr.push('(' + outArr[i][j]['dim'] + '),\n');
+                        }
+                        else {
+                            outStrArr.push('(' + outArr[i][j]['dim'] + ')');
+                        }
                     }
                 }
             }
@@ -67,24 +107,37 @@ function ComboApp() {
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
         const parsedInputList = parsedInput.split(' ');
+        let tmp = null;
 
         if (parsedInput.length === 0) {
-            setCardinalityChecklist([]);
-        }
-        else if (parsedInputList.length+1 > cardinalityCheckList.length) {
-            const cardinalityList = [...cardinalityCheckList];
-
-            for (let i = cardinalityCheckList.length; i <= parsedInputList.length; ++i) {
-                cardinalityList.push({ 'num': i, 'state': true });
-            }
-            
-            setCardinalityChecklist(cardinalityList);
+            tmp = [];
         }
         else {
-            let tmp = [...cardinalityCheckList];
-            tmp.length = parsedInputList.length+1;
-            setCardinalityChecklist(tmp);
+            const cardCheckList = [...cardinalityCheckList];
+            tmp = [];
+
+            for (let i = 0; i <= parsedInputList.length; ++i) {
+                if (i < cardCheckList.length)
+                    tmp.push({ 'num': i, 'state': cardCheckList[i]['state'] });
+                else 
+                    tmp.push({ 'num': i, 'state': true });
+            }
         }
+
+        const dimChecks = [...dimensionCheckList];
+        let numChecked = 0;
+
+        for (let i = 0; i < dimChecks.length; ++i) {
+            if (dimChecks[i]['state'] === true) {
+                ++numChecked;
+            }
+        }
+
+        if (numChecked > 1) {
+            tmp.splice(1, numChecked-1);
+        }
+
+        setCardinalityChecklist(tmp);
     }
 
     const generateDimensionList = (inputStr) => {
@@ -92,30 +145,29 @@ function ComboApp() {
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
         const parsedInputList = parsedInput.split(' ');
+        let tmp = [];
 
         if (parsedInput.length === 0) {
-            setDimensionChecklist([]);
+            tmp = [];
         }
         else if (parsedInputList.length === dimensionCheckList.length) {
-            const dimensionCheckState = [...dimensionCheckList];
+            tmp = [...dimensionCheckList];
             
             for (let i = 0; i < parsedInputList.length; ++i) {
-                if (parsedInputList[i] != dimensionCheckState[i]['dim']) {
-                    dimensionCheckState[i]['dim'] = parsedInputList[i];
+                if (parsedInputList[i] !== tmp[i]['dim']) {
+                    tmp[i]['dim'] = parsedInputList[i];
                 }
             }
-
-            setDimensionChecklist(dimensionCheckState);
         }
         else {
-            const tmp = [];
+            tmp = [];
 
             for (let i = 0; i < parsedInputList.length; ++i) {
                 tmp.push({'dim': parsedInputList[i], 'state': false})
             }
-
-            setDimensionChecklist(tmp);
         }
+
+        setDimensionChecklist(tmp);
     }
 
     const textInputHandler = (inputStr) => {
@@ -134,6 +186,7 @@ function ComboApp() {
         const tmpList = [...dimensionCheckList];
         tmpList[ndx]['state'] = !tmpList[ndx]['state'];
         setDimensionChecklist(tmpList);
+        generateCardinalityList(input);
     }
 
     const clear = () => {
