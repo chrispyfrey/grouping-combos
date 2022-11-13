@@ -102,6 +102,7 @@ function ComboApp() {
                 }
             }
 
+            outStrArr[outStrArr.length-1] = outStrArr[outStrArr.length-1].replace(',\n', '');
             setOutput(outStrArr.join(''));
         }
         else {
