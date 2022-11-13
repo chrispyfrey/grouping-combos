@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/grouping-combos/static/css/main.acdab873.css",
-    "main.js": "/grouping-combos/static/js/main.33a521c5.js",
+    "main.js": "/grouping-combos/static/js/main.dbc8dfdb.js",
     "index.html": "/grouping-combos/index.html",
     "main.acdab873.css.map": "/grouping-combos/static/css/main.acdab873.css.map",
-    "main.33a521c5.js.map": "/grouping-combos/static/js/main.33a521c5.js.map"
+    "main.dbc8dfdb.js.map": "/grouping-combos/static/js/main.dbc8dfdb.js.map"
   },
   "entrypoints": [
     "static/css/main.acdab873.css",
-    "static/js/main.33a521c5.js"
+    "static/js/main.dbc8dfdb.js"
   ]
 }
