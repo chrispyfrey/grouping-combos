@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './App.css';
 
 // TODO
-// 1. Intermediary state to select cardinalities of combinations
 // 2. Copy text button/functionality
 
 function ComboApp() {
@@ -11,7 +10,11 @@ function ComboApp() {
     const [dimensionCheckList, setDimensionChecklist] = useState([]);
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
-
+    const [showGroupingTool, setShowGroupingTool] = useState(true);
+    const [filterIndex, setFilterIndex] = useState(0);
+    const [formatFunction, setFormatFunction] = useState('0');
+    const [dimComboInput, setDimComboInput] = useState('');
+    
     const generateCombinations = (inputStr) => {
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
@@ -178,7 +181,11 @@ function ComboApp() {
         setDimensionChecklist(tmp);
     }
 
-    const textInputHandler = (inputStr) => {
+    const textInputHandlerDimCombos = (inputStr) => {
+        setDimComboInput(inputStr);
+    }
+
+    const textInputHandlerMain = (inputStr) => {
         generateCardinalityList(inputStr);
         generateDimensionList(inputStr);
         setInput(inputStr);
@@ -202,73 +209,399 @@ function ComboApp() {
         setOutput('');
         setCardinalityChecklist([]);
         setDimensionChecklist([]);
+        setDimComboInput('');
     }
     
-    return (
-        <>
-        <div>
-            <h1 className='title'>Grouping Set Combination Generator</h1>
-            <h4 className='subTitle'>Commas, spaces, newlines, or combinations of these are all accepted delimiters.</h4>
-        </div>
-        <div className='flexContainerRow'>
-            <div className='flexContainerColInput'>
-                <div className='subSubTitle'>Grouping Dimensions</div>
-                <textarea
-                    className='inputBox'
-                    spellCheck='false'
-                    placeholder='Enter dimensions here...'
-                    value={input}
-                    onChange={e => textInputHandler(e.target.value)}
-                />
-            </div>
-            <div className='flexContainerColCard'>
-                <div className='subSubTitle'>Dimensions Required in Every Set</div>
-                <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
-                    <div key={index}>
-                        <input 
-                            type='checkbox'
-                            checked={item['state']}
-                            onChange={e => dimensionCheckInputHandler(index)}
+    const formatDimensions = (formatFunction, inputStr) => {
+        switch (formatFunction) {
+            case '0':
+                setInput(singleQuotes(inputStr));
+                break;
+            case '1':
+                setInput(doubleQuotes(inputStr));
+                break;
+            case '2':
+                setInput(removeQuotes(inputStr));
+                break;
+            case '3':
+                setInput(upperCase(inputStr));
+                break;
+            case '4':
+                setInput(lowerCase(inputStr));
+                break;
+            case '5':
+                setInput(snakeCase(inputStr));
+                break;
+            case '6':
+                setInput(camelCase(inputStr));
+                break;
+            case '7':
+                setInput(pascalCase(inputStr));
+                break;
+            case '8':
+                setInput(titleCase(inputStr));
+                break;
+            case '9':
+                setInput(commaDelimiter(inputStr));
+                break;
+            case '10':
+                setInput(commaAndNewLineDelimiter(inputStr));
+                break;
+            case '11':
+                setInput(spaceDelimiter(inputStr));
+                break;
+            case '12':
+                setInput(newLineDelimiter(inputStr));
+                break;
+            default:
+                break;
+        }
+    }
+ 
+    const singleQuotes = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = "'" + splitDimArr[i] + "'";
+        }
+
+        return splitDimArr.join('\n');
+    }
+
+    const doubleQuotes = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = '"' + splitDimArr[i] + '"';
+        }
+
+        return splitDimArr.join('\n');
+    }
+
+    const removeQuotes = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+        let firstChar = '';
+        let lastChar = '';
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            firstChar = splitDimArr[i].charAt(0);
+            lastChar = splitDimArr[i].charAt(splitDimArr[i].length-1);
+            
+            if (firstChar === "'" || firstChar === '"' || lastChar === "'" || lastChar === '"') {
+                splitDimArr[i] = splitDimArr[i].slice(1, splitDimArr[i].length-1);
+            }
+        }
+
+        return splitDimArr.join('\n');
+    }
+
+    const upperCase = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = splitDimArr[i].toUpperCase();
+        }
+
+        return splitDimArr.join('\n');
+    }
+
+    const lowerCase = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = splitDimArr[i].toLowerCase();
+        }
+
+        return splitDimArr.join('\n');
+    }
+
+    const snakeCase = (inputStr) => {
+        return 'WIP';
+    }
+
+    const camelCase = (inputStr) => {
+        return 'WIP';
+    }
+
+    const pascalCase = (inputStr) => {
+        return 'WIP';
+    }
+
+    const titleCase = (inputStr) => {
+        return 'WIP';
+    }
+
+    const commaDelimiter = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = splitDimArr[i].toLowerCase();
+        }
+
+        return splitDimArr.join(', ');
+    }
+
+    const commaAndNewLineDelimiter = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = splitDimArr[i].toLowerCase();
+        }
+
+        return splitDimArr.join(',\n');
+    }
+
+    const spaceDelimiter = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = splitDimArr[i].toLowerCase();
+        }
+
+        return splitDimArr.join(' ');
+    }
+
+    const newLineDelimiter = (inputStr) => {
+        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        parsedInput = parsedInput.replace(/ {2,}/g, ' ');
+        parsedInput = parsedInput.trim();
+
+        let splitDimArr = parsedInput.split(' ');
+
+        for (let i = 0; i < splitDimArr.length; ++i) {
+            splitDimArr[i] = splitDimArr[i].toLowerCase();
+        }
+
+        return splitDimArr.join('\n');
+    }
+
+    const dimensionFilterArea = (ndx) => {
+        switch(ndx) {
+            case 0:
+                return (
+                    <div className='flexContainerColCard'>
+                        <div className='subSubTitle'>Required Dim. Combos</div>
+                        <textarea
+                            className='inputBoxDimCombos'
+                            spellCheck='false'
+                            placeholder={'(enter, desired),\n(dimension, combinations),\n(like, grouping, sets)'}
+                            value={dimComboInput}
+                            onChange={e => textInputHandlerDimCombos(e.target.value)}
                         />
-                        <span>{item['dim']}</span>
                     </div>
-                ))}
+                );
+            case 1:
+                return (
+                    <div className='flexContainerColCard'>
+                        <div className='subSubTitle'>Must Contain Filter</div>
+                        <div className='dimensionCheckBoxContainer'>{dimensionCheckList.map((item, index) => (
+                            <div key={index}>
+                                <input 
+                                    type='checkbox'
+                                    checked={item['state']}
+                                    onChange={e => dimensionCheckInputHandler(index)}
+                                />
+                                <span>{item['dim']}</span>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+                );
+            case 2:
+                return (
+                    <div className='flexContainerColCard'>
+                        <div className='subSubTitle'>Group Cardinality Filter</div>
+                        <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
+                            <div key={index}>
+                                <input
+                                    type='checkbox'
+                                    checked={item['state']}
+                                    onChange={e => cardinalityCheckInputHandler(index)}
+                                />
+                                <span>{item['num']}</span>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+                );
+            default:
+                break;
+        }
+        
+    }
+    
+    if(showGroupingTool) {
+        return (
+            <>
+            <div>
+                <button
+                    className='headerButton'
+                    disabled={showGroupingTool ? true : false}
+                    onClick={() => setShowGroupingTool(true)}>
+                    Grouping Sets
+                </button>
+                <button
+                    className='headerButton'
+                    disabled={showGroupingTool ? false : true}
+                    onClick={() => setShowGroupingTool(false)}>
+                    Dimension Formatter
+                </button>
+                <h1 className='title'>Grouping Set Combination Generator</h1>
+                <h4 className='subTitle'>Commas, spaces, newlines, or combinations of these are all accepted delimiters.</h4>
+            </div>
+            <div className='flexContainerRow'>
+                <div className='flexContainerColInput1'>
+                    <div className='subSubTitle'>Grouping Dimensions</div>
+                    <textarea
+                        className='inputBoxMain'
+                        spellCheck='false'
+                        placeholder='Enter dimensions here...'
+                        value={input}
+                        onChange={e => textInputHandlerMain(e.target.value)}
+                    />
+                </div>
+                {dimensionFilterArea(filterIndex)}
+                <div className='flexContainerColCardFilterButtons1'>
+                    <button
+                        className='filterButton'
+                        disabled={filterIndex === 0 ? true : false}
+                        onClick={() => setFilterIndex(0)}>
+                        Required Dim. Combos
+                    </button>
+                    <button
+                        className='filterButton'
+                        disabled={filterIndex === 1 ? true : false}
+                        onClick={() => setFilterIndex(1)}>
+                        Must Contain Filter
+                    </button>
+                    <button
+                        className='filterButton'
+                        disabled={filterIndex === 2 ? true : false}
+                        onClick={() => setFilterIndex(2)}>
+                        Group Cardinality Filter
+                    </button>
+                    <div className='flexContainerColCardFilterButtons2'>
+                        <button
+                            className='filterButton'
+                            disabled={input === '' ? true : false}
+                            onClick={() => generateCombinations(input)}>
+                            Generate
+                        </button>
+                        <button
+                            className='filterButton'
+                            disabled={input === '' ? true : false}
+                            onClick={clear}>
+                            Clear
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div className='flexContainerColDim'>
-                <div className='subSubTitle'>Grouping Set Cardinality Filter</div>
-                <div className='cardinalityCheckBoxContainer'>{cardinalityCheckList.map((item, index) => (
-                    <div key={index}>
-                        <input
-                            type='checkbox'
-                            checked={item['state']}
-                            onChange={e => cardinalityCheckInputHandler(index)}
-                        />
-                        <span>{item['num']}</span>
-                    </div>
-                ))}
+            
+            <div className='flexContainerRow'>
+                <p className='output'>{output === '' ? null : output}</p>
+            </div>
+            </>
+        )
+    }
+    else {
+        return (
+            <>
+            <div>
+                <button
+                    className='headerButton'
+                    disabled={showGroupingTool ? true : false}
+                    onClick={() => setShowGroupingTool(true)}>
+                    Grouping Sets
+                </button>
+                <button
+                    className='headerButton'
+                    disabled={showGroupingTool ? false : true}
+                    onClick={() => setShowGroupingTool(false)}>
+                    Dimension Formatter
+                </button>
+                <h1 className='title'>Dimension Formatter</h1>
+                <h4 className='subTitle'>Commas, spaces, newlines, or combinations of these are all accepted delimiters.</h4>
+            </div>
+            <div className='flexContainerRow'>
+                <div className='flexContainerColInput2'>
+                    <div className='subSubTitle'>Dimensions to Format</div>
+                    <textarea
+                        className='inputBoxMain'
+                        spellCheck='false'
+                        placeholder='Enter dimensions here...'
+                        value={input}
+                        onChange={e => textInputHandlerMain(e.target.value)}
+                    />
                 </div>
             </div>
-        </div>
-        <div className='flexContainerRow'>
-            <button
-                className='button'
-                disabled={input === '' ? true : false}
-                onClick={() => generateCombinations(input)}>
-                Generate
-            </button>
-            <button
-                className='button'
-                disabled={input === '' ? true : false}
-                onClick={clear}>
-                Clear
-            </button>
-        </div>
-        <div className='flexContainerRow'>
-            <p className='output'>{output === '' ? null : output}</p>
-        </div>
-        </>
-    )
+            <div className='flexContainerRow'>
+                <select
+                    className='stringActionSelection'
+                    id="dropdown"
+                    onChange={e => setFormatFunction(e.target.value)}>
+                    <option value='0'>'Single Quotes'</option>
+                    <option value='1'>"Double Quotes"</option>
+                    <option value='2'>Remove Quotes</option>
+                    <option value='3'>UPPER</option>
+                    <option value='4'>lower</option>
+                    <option value='5'>snake_case</option>
+                    <option value='6'>camelCase</option>
+                    <option value='7'>PascalCase</option>
+                    <option value='8'>Title Case</option>
+                    <option value='9'>Comma, Delimiter</option>
+                    <option value='10'>Comma,\n&,\nNewline,\nDelimiter</option>
+                    <option value='11'>Space Delimiter</option>
+                    <option value='12'>Newline\nDelimiter</option>
+                </select>
+                <button
+                    className='buttonFormat'
+                    disabled={input === '' ? true : false}
+                    onClick={() => formatDimensions(formatFunction, input)}>
+                    Format
+                </button>
+                <button
+                    className='buttonFormat'
+                    disabled={input === '' ? true : false}
+                    onClick={clear}>
+                    Clear
+                </button>
+            </div>
+            </>
+        )
+    }
+    
 }
   
 const root = ReactDOM.createRoot(document.getElementById("root"));
