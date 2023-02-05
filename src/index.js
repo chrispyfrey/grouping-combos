@@ -76,37 +76,74 @@ function ComboApp() {
             const outStrArr = [];
             const checkedCards = [...cardinalityCheckList];
             const cardSelections = [];
+            const dimensionCombos = dimComboInput;
+            const dimComboRegex = /((?:[(][^)]+[)])(?:,\s|\s|$)){1,}/g; 
 
-            for (let i = 0; i < checkedCards.length; ++i) {
-                if (checkedCards[i]['state'] === true) {
-                    cardSelections.push(checkedCards[i]['num']);
-                }
-            }
+            if ((dimensionCombos.trim() !== '' && dimensionCombos.match(dimComboRegex)) || dimensionCombos.trim() === '') {
+                const formattedDimCombos = [];
 
-            for (let i = 0; i < outArr.length; ++i) {
-                let splArr = [];
-                
-                if (outArr[i][0]['dim'] === '') {
-                    splArr = [];
+                if (dimensionCombos.trim() !== '') {
+                    let parsedDimCombos = dimensionCombos.replace(/,|\n/g, ' ');
+                    parsedDimCombos = parsedDimCombos.replace(/ {2,}/g, ' ');
+                    parsedDimCombos = parsedDimCombos.replace(/[(]/g, '');
+                    parsedDimCombos = parsedDimCombos.trim();
+                    let splitDimCombos = parsedDimCombos.split(') ');
+
+                    for (let i = 0; i < splitDimCombos.length; ++i) {
+                        splitDimCombos[i] = splitDimCombos[i].replace(/[)]/g, '')
+                        formattedDimCombos.push(splitDimCombos[i].split(' '));
+                    }
                 }
-                else {
-                    splArr = outArr[i][0]['dim'].split(', ');
+
+                for (let i = 0; i < checkedCards.length; ++i) {
+                    if (checkedCards[i]['state'] === true) {
+                        cardSelections.push(checkedCards[i]['num']);
+                    }
                 }
-                
-                if (cardSelections.includes(splArr.length)) {
-                    for (let j = 0; j < outArr[i].length; ++j) {
-                        if (i+1 < outArr.length || j+1 < outArr[i].length) {
-                            outStrArr.push('(' + outArr[i][j]['dim'] + '),\n');
-                        }
-                        else {
-                            outStrArr.push('(' + outArr[i][j]['dim'] + ')');
+    
+                for (let i = 0; i < outArr.length; ++i) {
+                    let splArr = [];
+                    
+                    if (outArr[i][0]['dim'] !== '') {
+                        splArr = outArr[i][0]['dim'].split(', ');
+                    }
+                    
+                    if (cardSelections.includes(splArr.length)) {
+                        for (let j = 0; j < outArr[i].length; ++j) {
+                            let comboFilterCount = 0;
+
+                            for (const filterCombo of formattedDimCombos) {
+                                let dimFilterCount = 0;
+
+                                for (const filterDim of filterCombo) {
+                                    if (outArr[i][j]['dim'].includes(filterDim)) {
+                                        ++dimFilterCount;
+                                    }
+                                }
+
+                                if (dimFilterCount === 0 || dimFilterCount === filterCombo.length) {
+                                    ++comboFilterCount;
+                                }
+                            }
+
+                            if (comboFilterCount === formattedDimCombos.length) {
+                                if (i+1 < outArr.length || j+1 < outArr[i].length) {
+                                    outStrArr.push('(' + outArr[i][j]['dim'] + '),\n');   
+                                }
+                                else {
+                                    outStrArr.push('(' + outArr[i][j]['dim'] + ')');
+                                } 
+                            }
                         }
                     }
                 }
+    
+                outStrArr[outStrArr.length-1] = outStrArr[outStrArr.length-1].replace(',\n', '');
+                setOutput(outStrArr.join(''));
             }
-
-            outStrArr[outStrArr.length-1] = outStrArr[outStrArr.length-1].replace(',\n', '');
-            setOutput(outStrArr.join(''));
+            else {
+                setOutput('Error: Dimension combination filtering input (must), (be, entered), (like, grouping, sets) and can be delimited by spaces, newlines, commas, or some combination.');
+            }
         }
         else {
             setOutput('Error: Input must contain more than one dimension and be delimited by spaces, newlines, commas, or some combination.');
@@ -230,27 +267,15 @@ function ComboApp() {
                 setInput(lowerCase(inputStr));
                 break;
             case '5':
-                setInput(snakeCase(inputStr));
-                break;
-            case '6':
-                setInput(camelCase(inputStr));
-                break;
-            case '7':
-                setInput(pascalCase(inputStr));
-                break;
-            case '8':
-                setInput(titleCase(inputStr));
-                break;
-            case '9':
                 setInput(commaDelimiter(inputStr));
                 break;
-            case '10':
+            case '6':
                 setInput(commaAndNewLineDelimiter(inputStr));
                 break;
-            case '11':
+            case '7':
                 setInput(spaceDelimiter(inputStr));
                 break;
-            case '12':
+            case '8':
                 setInput(newLineDelimiter(inputStr));
                 break;
             default:
@@ -333,22 +358,6 @@ function ComboApp() {
         }
 
         return splitDimArr.join('\n');
-    }
-
-    const snakeCase = (inputStr) => {
-        return 'WIP';
-    }
-
-    const camelCase = (inputStr) => {
-        return 'WIP';
-    }
-
-    const pascalCase = (inputStr) => {
-        return 'WIP';
-    }
-
-    const titleCase = (inputStr) => {
-        return 'WIP';
     }
 
     const commaDelimiter = (inputStr) => {
@@ -576,14 +585,10 @@ function ComboApp() {
                     <option value='2'>Remove Quotes</option>
                     <option value='3'>UPPER</option>
                     <option value='4'>lower</option>
-                    <option value='5'>snake_case</option>
-                    <option value='6'>camelCase</option>
-                    <option value='7'>PascalCase</option>
-                    <option value='8'>Title Case</option>
-                    <option value='9'>Comma, Delimiter</option>
-                    <option value='10'>Comma,\n&,\nNewline,\nDelimiter</option>
-                    <option value='11'>Space Delimiter</option>
-                    <option value='12'>Newline\nDelimiter</option>
+                    <option value='5'>Comma, Delimiter</option>
+                    <option value='6'>Comma,\n&,\nNewline,\nDelimiter</option>
+                    <option value='7'>Space Delimiter</option>
+                    <option value='8'>Newline\nDelimiter</option>
                 </select>
                 <button
                     className='buttonFormat'
