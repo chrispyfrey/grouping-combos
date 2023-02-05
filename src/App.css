@@ -57,7 +57,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     width: 20%;
-    min-width: 260px;
+    min-width: 320px;
 }
 
 .flexContainerColCardFilterButtons1 {

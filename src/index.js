@@ -516,11 +516,11 @@ function ComboApp() {
             case 0:
                 return (
                     <div className='flexContainerColCard'>
-                        <div className='subSubTitle'>Required Dim. Combos</div>
+                        <div className='subSubTitle'>Must Contain Dim. Combo Filter</div>
                         <textarea
                             className='inputBoxDimCombos'
                             spellCheck='false'
-                            placeholder={'(enter, desired),\n(dimension, combinations),\n(like, grouping, sets)'}
+                            placeholder={'(enter, required),\n(dimension, combinations),\n(like, grouping, sets),\n(tHiS, fEaTuRe, Is, CaSe, SeNsItIvE)'}
                             value={dimComboInput}
                             onChange={e => textInputHandlerDimCombos(e.target.value)}
                         />
@@ -681,7 +681,7 @@ function ComboApp() {
                     <option value='3'>UPPER</option>
                     <option value='4'>lower</option>
                     <option value='5'>Comma, Delimiter</option>
-                    <option value='6'>Comma,\n&,\nNewline,\nDelimiter</option>
+                    <option value='6'>Comma,\nand,\nNewline,\nDelimiter</option>
                     <option value='7'>Space Delimiter</option>
                     <option value='8'>Newline\nDelimiter</option>
                 </select>
