@@ -284,43 +284,86 @@ function ComboApp() {
     }
  
     const singleQuotes = (inputStr) => {
+        const newLineCount = inputStr.split('\n').length - 1;
+        const spaceCount = inputStr.split(' ').length - 1;
+        const commaCount = inputStr.split(',').length - 1;
+
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
+        const dimNum = splitDimArr.length;
 
-        for (let i = 0; i < splitDimArr.length; ++i) {
+        for (let i = 0; i < dimNum; ++i) {
             splitDimArr[i] = "'" + splitDimArr[i] + "'";
         }
 
-        return splitDimArr.join('\n');
+        if (newLineCount >= dimNum-2 && commaCount >= dimNum-2) {
+            return splitDimArr.join(',\n');
+        }
+        else if (commaCount >= dimNum-2) {
+            return splitDimArr.join(', ');
+        }
+        else if (newLineCount >= dimNum-2) {
+            return splitDimArr.join('\n');
+        }
+        else if (spaceCount >= dimNum-2) {
+            return splitDimArr.join(' ');
+        }
+        else {
+            return splitDimArr.join('\n');
+        }
     }
 
     const doubleQuotes = (inputStr) => {
+        const newLineCount = inputStr.split('\n').length - 1;
+        const spaceCount = inputStr.split(' ').length - 1;
+        const commaCount = inputStr.split(',').length - 1;
+
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
+        const dimNum = splitDimArr.length;
 
-        for (let i = 0; i < splitDimArr.length; ++i) {
+        for (let i = 0; i < dimNum; ++i) {
             splitDimArr[i] = '"' + splitDimArr[i] + '"';
         }
 
-        return splitDimArr.join('\n');
+        if (newLineCount >= dimNum-2 && commaCount >= dimNum-2) {
+            return splitDimArr.join(',\n');
+        }
+        else if (commaCount >= dimNum-2) {
+            return splitDimArr.join(', ');
+        }
+        else if (newLineCount >= dimNum-2) {
+            return splitDimArr.join('\n');
+        }
+        else if (spaceCount >= dimNum-2) {
+            return splitDimArr.join(' ');
+        }
+        else {
+            return splitDimArr.join('\n');
+        }
     }
 
     const removeQuotes = (inputStr) => {
+        const newLineCount = inputStr.split('\n').length - 1;
+        const spaceCount = inputStr.split(' ').length - 1;
+        const commaCount = inputStr.split(',').length - 1;
+
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
+        const dimNum = splitDimArr.length;
         let firstChar = '';
         let lastChar = '';
 
-        for (let i = 0; i < splitDimArr.length; ++i) {
+        for (let i = 0; i < dimNum; ++i) {
             firstChar = splitDimArr[i].charAt(0);
             lastChar = splitDimArr[i].charAt(splitDimArr[i].length-1);
             
@@ -329,35 +372,87 @@ function ComboApp() {
             }
         }
 
-        return splitDimArr.join('\n');
+        if (newLineCount >= dimNum-2 && commaCount >= dimNum-2) {
+            return splitDimArr.join(',\n');
+        }
+        else if (commaCount >= dimNum-2) {
+            return splitDimArr.join(', ');
+        }
+        else if (newLineCount >= dimNum-2) {
+            return splitDimArr.join('\n');
+        }
+        else if (spaceCount >= dimNum-2) {
+            return splitDimArr.join(' ');
+        }
+        else {
+            return splitDimArr.join('\n');
+        }
     }
 
     const upperCase = (inputStr) => {
+        const newLineCount = inputStr.split('\n').length - 1;
+        const spaceCount = inputStr.split(' ').length - 1;
+        const commaCount = inputStr.split(',').length - 1;
+
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
+        const dimNum = splitDimArr.length;
 
-        for (let i = 0; i < splitDimArr.length; ++i) {
+        for (let i = 0; i < dimNum; ++i) {
             splitDimArr[i] = splitDimArr[i].toUpperCase();
         }
 
-        return splitDimArr.join('\n');
+        if (newLineCount >= dimNum-2 && commaCount >= dimNum-2) {
+            return splitDimArr.join(',\n');
+        }
+        else if (commaCount >= dimNum-2) {
+            return splitDimArr.join(', ');
+        }
+        else if (newLineCount >= dimNum-2) {
+            return splitDimArr.join('\n');
+        }
+        else if (spaceCount >= dimNum-2) {
+            return splitDimArr.join(' ');
+        }
+        else {
+            return splitDimArr.join('\n');
+        }
     }
 
     const lowerCase = (inputStr) => {
+        const newLineCount = inputStr.split('\n').length - 1;
+        const spaceCount = inputStr.split(' ').length - 1;
+        const commaCount = inputStr.split(',').length - 1;
+
         let parsedInput = inputStr.replace(/,|\n/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
+        const dimNum = splitDimArr.length;
 
         for (let i = 0; i < splitDimArr.length; ++i) {
             splitDimArr[i] = splitDimArr[i].toLowerCase();
         }
 
-        return splitDimArr.join('\n');
+        if (newLineCount >= dimNum-2 && commaCount >= dimNum-2) {
+            return splitDimArr.join(',\n');
+        }
+        else if (commaCount >= dimNum-2) {
+            return splitDimArr.join(', ');
+        }
+        else if (newLineCount >= dimNum-2) {
+            return splitDimArr.join('\n');
+        }
+        else if (spaceCount >= dimNum-2) {
+            return splitDimArr.join(' ');
+        }
+        else {
+            return splitDimArr.join('\n');
+        }
     }
 
     const commaDelimiter = (inputStr) => {
@@ -368,7 +463,7 @@ function ComboApp() {
         let splitDimArr = parsedInput.split(' ');
 
         for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i].toLowerCase();
+            splitDimArr[i] = splitDimArr[i];
         }
 
         return splitDimArr.join(', ');
@@ -382,7 +477,7 @@ function ComboApp() {
         let splitDimArr = parsedInput.split(' ');
 
         for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i].toLowerCase();
+            splitDimArr[i] = splitDimArr[i];
         }
 
         return splitDimArr.join(',\n');
@@ -396,7 +491,7 @@ function ComboApp() {
         let splitDimArr = parsedInput.split(' ');
 
         for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i].toLowerCase();
+            splitDimArr[i] = splitDimArr[i];
         }
 
         return splitDimArr.join(' ');
@@ -410,7 +505,7 @@ function ComboApp() {
         let splitDimArr = parsedInput.split(' ');
 
         for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i].toLowerCase();
+            splitDimArr[i] = splitDimArr[i];
         }
 
         return splitDimArr.join('\n');
