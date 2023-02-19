@@ -16,7 +16,7 @@ function ComboApp() {
     const [dimComboInput, setDimComboInput] = useState('');
     
     const generateCombinations = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
         
@@ -83,7 +83,7 @@ function ComboApp() {
                 const formattedDimCombos = [];
 
                 if (dimensionCombos.trim() !== '') {
-                    let parsedDimCombos = dimensionCombos.replace(/,|\n/g, ' ');
+                    let parsedDimCombos = dimensionCombos.replace(/,|\s/g, ' ');
                     parsedDimCombos = parsedDimCombos.replace(/ {2,}/g, ' ');
                     parsedDimCombos = parsedDimCombos.replace(/[(]/g, '');
                     parsedDimCombos = parsedDimCombos.trim();
@@ -151,7 +151,7 @@ function ComboApp() {
     }
 
     const generateCardinalityList = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
         const parsedInputList = parsedInput.split(' ');
@@ -189,7 +189,7 @@ function ComboApp() {
     }
 
     const generateDimensionList = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
         const parsedInputList = parsedInput.split(' ');
@@ -288,7 +288,7 @@ function ComboApp() {
         const spaceCount = inputStr.split(' ').length - 1;
         const commaCount = inputStr.split(',').length - 1;
 
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
@@ -321,7 +321,7 @@ function ComboApp() {
         const spaceCount = inputStr.split(' ').length - 1;
         const commaCount = inputStr.split(',').length - 1;
 
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
@@ -354,7 +354,7 @@ function ComboApp() {
         const spaceCount = inputStr.split(' ').length - 1;
         const commaCount = inputStr.split(',').length - 1;
 
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
@@ -394,7 +394,7 @@ function ComboApp() {
         const spaceCount = inputStr.split(' ').length - 1;
         const commaCount = inputStr.split(',').length - 1;
 
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
@@ -427,7 +427,7 @@ function ComboApp() {
         const spaceCount = inputStr.split(' ').length - 1;
         const commaCount = inputStr.split(',').length - 1;
 
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
@@ -456,57 +456,41 @@ function ComboApp() {
     }
 
     const commaDelimiter = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
-
-        for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i];
-        }
 
         return splitDimArr.join(', ');
     }
 
     const commaAndNewLineDelimiter = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
-
-        for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i];
-        }
 
         return splitDimArr.join(',\n');
     }
 
     const spaceDelimiter = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
-
-        for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i];
-        }
 
         return splitDimArr.join(' ');
     }
 
     const newLineDelimiter = (inputStr) => {
-        let parsedInput = inputStr.replace(/,|\n/g, ' ');
+        let parsedInput = inputStr.replace(/,|\s/g, ' ');
         parsedInput = parsedInput.replace(/ {2,}/g, ' ');
         parsedInput = parsedInput.trim();
 
         let splitDimArr = parsedInput.split(' ');
-
-        for (let i = 0; i < splitDimArr.length; ++i) {
-            splitDimArr[i] = splitDimArr[i];
-        }
 
         return splitDimArr.join('\n');
     }
@@ -523,6 +507,12 @@ function ComboApp() {
                             placeholder={'(enter, required),\n(dimension, combinations),\n(like, grouping, sets),\n(tHiS, fEaTuRe, Is, CaSe, SeNsItIvE)'}
                             value={dimComboInput}
                             onChange={e => textInputHandlerDimCombos(e.target.value)}
+                            onKeyDown={e => {
+                                    if (e.key === 'Tab') {
+                                        e.preventDefault()
+                                    }
+                                }
+                            }
                         />
                     </div>
                 );
@@ -594,6 +584,12 @@ function ComboApp() {
                         placeholder='Enter dimensions here...'
                         value={input}
                         onChange={e => textInputHandlerMain(e.target.value)}
+                        onKeyDown={e => {
+                                if (e.key === 'Tab') {
+                                    e.preventDefault()
+                                }
+                            }
+                        }
                     />
                 </div>
                 {dimensionFilterArea(filterIndex)}
@@ -667,6 +663,12 @@ function ComboApp() {
                         placeholder='Enter dimensions here...'
                         value={input}
                         onChange={e => textInputHandlerMain(e.target.value)}
+                        onKeyDown={e => {
+                                if (e.key === 'Tab') {
+                                    e.preventDefault()
+                                }
+                            }
+                        }
                     />
                 </div>
             </div>

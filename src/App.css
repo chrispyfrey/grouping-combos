@@ -73,7 +73,7 @@ html, body {
     display: flex;
     padding-top: 104px;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
     width: 15%;
     min-width: 170px;
 }
